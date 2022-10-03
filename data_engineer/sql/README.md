@@ -67,7 +67,8 @@ FROM Customer;
 
 ```sql
 SELECT Country_name, COUNT(DISTINCT(customer_id))
-FROM Customer INNER JOIN Countries USING(country_code)
+FROM Customer
+  INNER JOIN Countries USING(country_code)
 WHERE country_name IN ("France", "Italy");
 ```
 
@@ -85,8 +86,9 @@ WHERE country_name IN ("France", "Italy");
 
 ```sql
 SELECT Customer_name, SUM(quantity*item_price) as Revenue
-FROM Customer INNER JOIN USING(customer_id)
-INNER JOIN Items USING(item_id)
+FROM Customer
+  INNER JOIN USING(customer_id)
+  INNER JOIN Items USING(item_id)
 GROUP BY Customer_name
 ORDER BY Revenue DESC
 LIMIT 10;
@@ -104,8 +106,9 @@ LIMIT 10;
 
 ```sql
 SELECT Country_name, IF(SUM(quantity*item_price) IS NONE, NULL, SUM(quantity*item_price)) as "RevenuePerCountry"
-FROM Countries LEFT JOIN Customer USING(country_code)
-INNER JOIN Orders USING(customer_id)
+FROM Countries
+  LEFT JOIN Customer USING(country_code)
+  INNER JOIN Orders USING(customer_id)
 GROUP BY Country_name;
 ```
 
@@ -123,8 +126,9 @@ GROUP BY Country_name;
 
 ```sql
 SELECT Customer_id, Customer_name, item_name as "MostExpensiveItemName"
-FROM Customer INNER JOIN Orders USING(customer_id)
-INNER JOIN Items USING(item_id)
+FROM Customer
+  INNER JOIN Orders USING(customer_id)
+  INNER JOIN Items USING(item_id)
 GROUP BY 1, 2, 3
 ORDER BY MAX(item_price) DESC;
 ```
@@ -144,7 +148,8 @@ ORDER BY MAX(item_price) DESC;
 ```sql
 -- for only one year
 SELECT EXTRACT(MONTH FROM date_time), SUM(quantity*item_price) as "Total Revenue"
-FROM Orders INNER JOIN Items USING(item_id)
+FROM Orders
+  INNER JOIN Items USING(item_id)
 GROUP BY 1;
 ```
 
@@ -156,8 +161,9 @@ GROUP BY 1;
 
 ```sql
 SELECT SUM(quantity*item_price) as "Total Revenu MENA"
-FROM Countries LEFT JOIN Customer USING(country_code)
-INNER JOIN Orders USING(customer_id)
+FROM Countries
+  LEFT JOIN Customer USING(country_code)
+  INNER JOIN Orders USING(customer_id)
 WHERE country_name = "MENA"
 GROUP BY 1;
 ```
