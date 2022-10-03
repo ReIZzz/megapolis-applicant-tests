@@ -175,8 +175,8 @@ GROUP BY 1;
 Вы должны их найти и вернуть количество дубликатов.
 
 ```sql
-SELECT date_time, customer_id, item_id, count(*)
+SELECT date_time, customer_id, item_id, COUNT(*)
 FROM Orders
 GROUP BY date_time, customer_id, item_id
-HAVING count(*)>1;
+HAVING COUNT(*)>1;
 ```
