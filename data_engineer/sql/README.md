@@ -54,7 +54,8 @@ select count (*) from items
 | #                             |
 
 ```sql
--- result here
+SELECT COUNT(DISTINCT  customer_id) as CustomerCountDistinct
+FROM Customer;
 ```
 
 ### 2) Количество покупателей из Италии и Франции
@@ -65,7 +66,9 @@ select count (*) from items
 | Italy                     | #                             |
 
 ```sql
--- result here
+SELECT Country_name, COUNT(DISTINCT(customer_id))
+FROM Customer INNER JOIN Countries USING(country_code)
+WHERE country_name IN ("France", "Italy");
 ```
 
 ### 3) ТОП 10 покупателей по расходам
@@ -81,7 +84,12 @@ select count (*) from items
 | #                      | #           |
 
 ```sql
--- result here
+SELECT Customer_name, SUM(quantity*item_price) as Revenue
+FROM Customer INNER JOIN USING(customer_id)
+INNER JOIN Items USING(item_id)
+GROUP BY Customer_name
+ORDER BY Revenue DESC
+LIMIT 10;
 ```
 
 ### 4) Общая выручка USD по странам, если нет дохода, вернуть NULL
@@ -95,7 +103,10 @@ select count (*) from items
 | Tanzania                  | #                     |
 
 ```sql
--- result here
+SELECT Country_name, IF(SUM(quantity*item_price) IS NONE, NULL, SUM(quantity*item_price)) as "RevenuePerCountry"
+FROM Countries LEFT JOIN Customer USING(country_code)
+INNER JOIN Orders USING(customer_id)
+GROUP BY Country_name;
 ```
 
 ### 5) Самый дорогой товар, купленный одним покупателем
@@ -111,7 +122,11 @@ select count (*) from items
 | #                | #                  | #                         |
 
 ```sql
--- result here
+SELECT Customer_id, Customer_name, item_name as "MostExpensiveItemName"
+FROM Customer INNER JOIN Orders USING(customer_id)
+INNER JOIN Items USING(item_id)
+GROUP BY 1, 2, 3
+ORDER BY MAX(item_price) DESC;
 ```
 
 ### 6) Ежемесячный доход
@@ -127,7 +142,10 @@ select count (*) from items
 | #                     | #                 |
 
 ```sql
--- result here
+-- for only one year
+SELECT EXTRACT(MONTH FROM date_time), SUM(quantity*item_price) as "Total Revenue"
+FROM Orders INNER JOIN Items USING(item_id)
+GROUP BY 1;
 ```
 
 ### 7) Общий доход в MENA
@@ -137,7 +155,11 @@ select count (*) from items
 | #                      |
 
 ```sql
--- result here
+SELECT SUM(quantity*item_price) as "Total Revenu MENA"
+FROM Countries LEFT JOIN Customer USING(country_code)
+INNER JOIN Orders USING(customer_id)
+WHERE country_name = "MENA"
+GROUP BY 1;
 ```
 
 ### 8) Найти дубликаты
