@@ -87,7 +87,7 @@ WHERE country_name IN ("France", "Italy");
 ```sql
 SELECT Customer_name, SUM(quantity*item_price) as Revenue
 FROM Customer
-  INNER JOIN USING(customer_id)
+  INNER JOIN Orders USING(customer_id)
   INNER JOIN Items USING(item_id)
 GROUP BY Customer_name
 ORDER BY Revenue DESC
@@ -178,5 +178,5 @@ GROUP BY 1;
 SELECT date_time, customer_id, item_id, COUNT(*)
 FROM Orders
 GROUP BY date_time, customer_id, item_id
-HAVING COUNT(*)>1;
+HAVING COUNT(*) > 1;
 ```
