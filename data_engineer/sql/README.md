@@ -169,5 +169,8 @@ GROUP BY 1;
 Вы должны их найти и вернуть количество дубликатов.
 
 ```sql
--- result here
+SELECT date_time, customer_id, item_id, count(*)
+FROM Orders
+GROUP BY date_time, customer_id, item_id
+HAVING count(*)>1;
 ```
